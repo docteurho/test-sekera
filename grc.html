@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Conformité & GRC — Sekera Group</title>
+<meta name="description" content="Sekera Group vous accompagne sur ISO 27001, RGPD, NIS2, DORA et la conformité cyber au Maroc et en France. Audit, certification, gouvernance des risques.">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --teal:#008EAB;--teal-light:#00B8D9;--dark:#005161;
+  --bg:#020D12;--surface:#061820;--surface2:#0B2535;
+  --border:rgba(0,142,171,0.2);--border-bright:rgba(0,142,171,0.45);
+  --text:#EEF4F6;--muted:#6E9BAB;
+  --glow:0 0 50px rgba(0,142,171,0.35);--glow-sm:0 0 25px rgba(0,142,171,0.2);
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--text);font-family:'Poppins',sans-serif;font-size:16px;line-height:1.6;overflow-x:hidden;cursor:none;}
+
+/* ── CURSOR ── */
+#cur-dot{width:8px;height:8px;background:var(--teal-light);border-radius:50%;position:fixed;pointer-events:none;transform:translate(-50%,-50%);z-index:9999;box-shadow:0 0 12px var(--teal);}
+#cur-ring{width:32px;height:32px;border:1px solid rgba(0,184,217,.45);border-radius:50%;position:fixed;pointer-events:none;transform:translate(-50%,-50%);z-index:9998;transition:width .22s,height .22s;}
+.cur-hover #cur-dot{width:12px;height:12px;}
+.cur-hover #cur-ring{width:44px;height:44px;}
+
+/* ── NAV ── */
+nav{position:fixed;top:0;width:100%;z-index:200;padding:0 5%;display:flex;align-items:center;justify-content:space-between;min-height:72px;background:rgba(2,13,18,.88);backdrop-filter:blur(28px);border-bottom:1px solid var(--border);transition:all .3s;}
+nav.scrolled{min-height:62px;background:rgba(2,13,18,.97);}
+.nav-logo img{height:32px;display:block;}
+.nav-menu{display:flex;align-items:center;list-style:none;gap:.2rem;}
+.nav-menu a,.nav-menu .nav-btn{display:flex;align-items:center;gap:.3rem;padding:.5rem 1rem;color:var(--muted);font-size:.78rem;font-weight:500;letter-spacing:.04em;text-decoration:none;background:none;border:none;font-family:'Poppins',sans-serif;cursor:none;transition:color .2s;white-space:nowrap;}
+.nav-menu a:hover,.nav-menu .nav-btn:hover{color:var(--teal-light);}
+.nav-cta{background:var(--teal)!important;color:#fff!important;border-radius:2px;padding:.55rem 1.2rem!important;margin-left:.5rem;}
+.nav-cta:hover{background:var(--teal-light)!important;box-shadow:var(--glow-sm)!important;}
+.dropdown{display:none;position:absolute;top:calc(100% + 8px);left:50%;transform:translateX(-50%);background:var(--surface);border:1px solid var(--border-bright);border-radius:10px;padding:1.5rem;min-width:500px;z-index:300;box-shadow:0 24px 70px rgba(0,0,0,.7);}
+.dropdown.open{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;}
+.drop-group h4{font-size:.6rem;font-weight:700;text-transform:uppercase;letter-spacing:.14em;color:var(--teal);margin-bottom:.9rem;}
+.drop-link{display:flex;align-items:flex-start;gap:.75rem;padding:.5rem .6rem;border-radius:6px;text-decoration:none;cursor:none;margin-bottom:.2rem;transition:background .2s;}
+.drop-link:hover{background:rgba(0,142,171,.08);}
+.drop-icon{width:30px;height:30px;flex-shrink:0;background:rgba(0,142,171,.1);border:1px solid rgba(0,142,171,.25);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:.8rem;}
+.drop-link strong{display:block;font-size:.78rem;font-weight:600;color:var(--text);}
+.drop-link span{font-size:.68rem;color:var(--muted);font-weight:300;}
+.burger{display:none;flex-direction:column;gap:5px;background:none;border:none;cursor:none;padding:.3rem;}
+.burger span{display:block;width:22px;height:2px;background:var(--text);border-radius:2px;}
+.mobile-nav{display:none;position:fixed;inset:0;top:72px;background:var(--surface);z-index:190;padding:1.5rem 5%;overflow-y:auto;}
+.mobile-nav.open{display:block;}
+.mobile-nav a{display:block;padding:.85rem 0;color:var(--muted);font-size:.9rem;text-decoration:none;border-bottom:1px solid var(--border);cursor:none;transition:color .2s;}
+.mobile-nav a:hover{color:var(--teal);}
+
+/* ── BUTTONS ── */
+.btn{display:inline-flex;align-items:center;gap:.5rem;padding:.85rem 1.9rem;font-family:'Poppins',sans-serif;font-size:.82rem;font-weight:600;letter-spacing:.03em;border-radius:2px;text-decoration:none;cursor:none;border:none;transition:all .22s;}
+.btn-primary{background:var(--teal);color:#fff;}
+.btn-primary:hover{background:var(--teal-light);box-shadow:var(--glow);transform:translateY(-2px);}
+.btn-outline{background:transparent;color:var(--text);border:1px solid rgba(0,184,217,.3);}
+.btn-outline:hover{border-color:var(--teal-light);color:var(--teal-light);transform:translateY(-2px);}
+.btn-ghost{background:none;border:none;color:rgba(255,255,255,.85);font-family:'Poppins',sans-serif;font-size:.8rem;font-weight:600;display:inline-flex;align-items:center;gap:.35rem;cursor:none;transition:color .2s;padding:0;text-decoration:none;}
+.btn-ghost:hover,.btn-ghost-dark:hover{color:var(--teal-light);}
+.btn-ghost-dark{background:none;border:none;color:var(--muted);font-family:'Poppins',sans-serif;font-size:.8rem;font-weight:600;display:inline-flex;align-items:center;gap:.35rem;cursor:none;transition:color .2s;padding:0;}
+.arrow-svg{width:13px;height:13px;}
+.arrow-s{display:inline-block;}
+
+/* ── LAYOUT HELPERS ── */
+.section{padding:7rem 5%;}
+.container{max-width:1200px;margin:0 auto;}
+.s-tag{display:inline-block;font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.16em;color:var(--teal-light);margin-bottom:.9rem;}
+.section-heading{font-size:clamp(1.9rem,3.5vw,2.8rem);font-weight:800;line-height:1.1;letter-spacing:-.025em;}
+.teal{color:var(--teal-light);}
+
+/* ── HERO — Header47 (2 colonnes) ── */
+#hero{position:relative;min-height:92vh;display:flex;align-items:center;padding:9rem 5% 5rem;overflow:hidden;}
+.hero-bg-img{position:absolute;inset:0;z-index:0;background-image:url('https://images.unsplash.com/photo-1507679799987-c73779587ccf?w=1600&q=80');background-size:cover;background-position:center top;}
+.hero-overlay{position:absolute;inset:0;z-index:1;background:linear-gradient(105deg,rgba(2,13,18,.97) 0%,rgba(2,13,18,.82) 55%,rgba(2,13,18,.55) 100%);}
+.hero-glow{position:absolute;inset:0;z-index:2;background:radial-gradient(ellipse 50% 70% at 20% 60%,rgba(0,142,171,.12) 0%,transparent 60%);}
+.hero-inner{position:relative;z-index:3;display:flex;gap:5rem;align-items:flex-start;max-width:1200px;width:100%;}
+.hero-left{flex:1;max-width:520px;}
+.hero-right{flex:1;max-width:520px;padding-top:.5rem;}
+.hero-h1{font-size:clamp(2.8rem,5.5vw,4.6rem);font-weight:900;line-height:1.0;letter-spacing:-.035em;animation:fadeUp .8s ease both;}
+.hero-h1 .accent{background:linear-gradient(90deg,var(--teal),var(--teal-light));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.hero-tag{display:inline-block;font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.16em;color:var(--teal-light);margin-bottom:1rem;animation:fadeUp .8s ease both;}
+.hero-p{font-size:.9rem;font-weight:300;color:rgba(238,244,246,.78);line-height:1.85;margin-bottom:2.2rem;animation:fadeUp .8s .1s ease both;}
+.hero-btns{display:flex;gap:1rem;flex-wrap:wrap;animation:fadeUp .8s .15s ease both;}
+.hero-stats{position:absolute;bottom:0;left:0;right:0;z-index:3;border-top:1px solid var(--border);}
+.hero-stat-bar{display:flex;max-width:1200px;width:100%;padding:0 5%;margin:0 auto;}
+.hero-stat{flex:1;padding:1.5rem 1rem;text-align:center;border-right:1px solid var(--border);}
+.hero-stat:last-child{border-right:none;}
+.hero-stat-num{font-size:1.5rem;font-weight:900;color:var(--teal-light);display:block;line-height:1;}
+.hero-stat-lbl{font-size:.62rem;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-top:.3rem;}
+
+/* ── TABS — Section services ── */
+#tabs-section{background:var(--surface);}
+.tabs-header{max-width:700px;margin:0 auto 3.5rem;text-align:center;}
+.tabs-header h2{margin:.4rem 0 1rem;}
+.tabs-header p{color:var(--muted);font-size:.88rem;font-weight:300;line-height:1.8;}
+.tabs-wrapper{border:1px solid var(--border);}
+.tabs-nav{display:flex;border-bottom:1px solid var(--border);}
+.tab-btn{flex:1;padding:1.3rem 1rem;background:none;border:none;border-right:1px solid var(--border);color:var(--muted);font-family:'Poppins',sans-serif;font-size:.72rem;font-weight:700;letter-spacing:.03em;cursor:none;transition:all .2s;text-align:center;line-height:1.3;position:relative;}
+.tab-btn:last-child{border-right:none;}
+.tab-btn:hover{color:var(--teal-light);background:rgba(0,142,171,.04);}
+.tab-btn.active{color:var(--text);background:var(--bg);}
+.tab-btn.active::after{content:'';position:absolute;bottom:-1px;left:0;right:0;height:1px;background:var(--bg);}
+.tab-pane{display:none;}
+.tab-pane.active{display:grid;grid-template-columns:1fr 1fr;gap:3rem;align-items:center;padding:3rem;}
+.tab-content-left h3{font-size:1.4rem;font-weight:800;margin:.4rem 0 1rem;line-height:1.25;}
+.tab-content-left p{color:var(--muted);font-size:.85rem;font-weight:300;line-height:1.85;margin-bottom:1.5rem;}
+.tab-content-left ul{padding-left:1.2rem;margin-bottom:1.5rem;}
+.tab-content-left ul li{color:var(--muted);font-size:.82rem;font-weight:300;line-height:1.7;margin-bottom:.4rem;}
+.tab-img{position:relative;overflow:hidden;border:1px solid var(--border);}
+.tab-img img{width:100%;height:320px;object-fit:cover;display:block;transition:transform .5s;}
+.tab-img:hover img{transform:scale(1.03);}
+.tab-img-glow{position:absolute;inset:0;background:linear-gradient(135deg,rgba(0,142,171,.07) 0%,transparent 60%);}
+.btn-group{display:flex;flex-wrap:wrap;gap:1rem;margin-top:.5rem;}
+
+/* ── LAYOUT369 — Grille asymétrique ── */
+#benefices{background:var(--bg);}
+.l369-header{max-width:700px;margin:0 auto 3.5rem;text-align:center;}
+.l369-header h2{margin:.4rem 0 1rem;}
+.l369-header p{color:var(--muted);font-size:.88rem;font-weight:300;}
+.l369-grid{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;grid-template-rows:auto auto;gap:1.2rem;}
+/* Carte grande : span 2 colonnes, 2 rangées */
+.l369-big{grid-column:span 2;grid-row:span 2;display:grid;grid-template-columns:1fr 1fr;border:1px solid var(--border);overflow:hidden;background:var(--surface);transition:border-color .3s;}
+.l369-big:hover{border-color:var(--border-bright);}
+.l369-big-content{padding:2.5rem;display:flex;flex-direction:column;justify-content:space-between;}
+.l369-big-photo{position:relative;overflow:hidden;min-height:320px;}
+.l369-big-photo img{width:100%;height:100%;object-fit:cover;transition:transform .5s;}
+.l369-big:hover .l369-big-photo img{transform:scale(1.04);}
+/* Cartes petites */
+.l369-sm{border:1px solid var(--border);overflow:hidden;background:var(--surface);display:flex;flex-direction:column;transition:border-color .3s,transform .3s;}
+.l369-sm:hover{border-color:var(--border-bright);transform:translateY(-3px);}
+.l369-sm-content{padding:1.5rem 1.5rem 1rem;}
+.l369-sm-photo{height:155px;overflow:hidden;}
+.l369-sm-photo img{width:100%;height:100%;object-fit:cover;transition:transform .5s;}
+.l369-sm:hover .l369-sm-photo img{transform:scale(1.05);}
+.card-tag{font-size:.6rem;font-weight:700;text-transform:uppercase;letter-spacing:.14em;color:var(--teal-light);margin-bottom:.4rem;}
+.card-h3{font-size:1rem;font-weight:700;color:var(--text);line-height:1.25;margin-bottom:.5rem;}
+.card-p{font-size:.78rem;color:var(--muted);font-weight:300;line-height:1.65;margin-bottom:.9rem;}
+
+/* ── TESTIMONIALS ── */
+#testimonials{background:var(--surface);}
+.t-header{max-width:700px;margin:0 auto 3.5rem;text-align:center;}
+.t-header h2{margin-bottom:.8rem;}
+.t-header p{color:var(--muted);font-size:.88rem;font-weight:300;}
+.t-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.2rem;}
+.t-card{background:var(--bg);border:1px solid var(--border);padding:2rem;display:flex;flex-direction:column;justify-content:space-between;transition:border-color .3s,box-shadow .3s;}
+.t-card:hover{border-color:var(--border-bright);box-shadow:var(--glow-sm);}
+.t-stars{color:var(--teal);font-size:.85rem;letter-spacing:2px;margin-bottom:1.2rem;}
+.t-quote{font-size:.84rem;font-weight:300;color:var(--muted);line-height:1.8;font-style:italic;margin-bottom:1.8rem;flex:1;}
+.t-author{display:flex;align-items:center;gap:.85rem;}
+.t-av{width:42px;height:42px;border-radius:50%;overflow:hidden;flex-shrink:0;border:2px solid var(--border-bright);}
+.t-av img{width:100%;height:100%;object-fit:cover;}
+.t-name{font-size:.8rem;font-weight:700;color:var(--text);}
+.t-role{font-size:.7rem;color:var(--muted);font-weight:300;}
+
+/* ── CTA33 — centré + logos ── */
+#cta{background:var(--bg);position:relative;overflow:hidden;}
+#cta::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 60% 80% at 50% 50%,rgba(0,142,171,.09) 0%,transparent 65%);}
+.cta-inner{max-width:720px;margin:0 auto;text-align:center;position:relative;z-index:1;}
+.cta-inner h2{margin:.4rem 0 1rem;}
+.cta-inner p{color:var(--muted);font-size:.88rem;font-weight:300;line-height:1.8;margin-bottom:2.2rem;}
+.cta-btns{display:flex;justify-content:center;gap:1rem;flex-wrap:wrap;margin-bottom:3rem;}
+.cta-logos{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:1rem 1.8rem;margin-top:2.5rem;}
+.cert-badge{background:rgba(0,142,171,.07);border:1px solid var(--border);border-radius:8px;padding:.7rem 1.3rem;font-size:.72rem;font-weight:700;color:var(--teal-light);letter-spacing:.06em;white-space:nowrap;transition:all .2s;}
+.cert-badge:hover{background:rgba(0,142,171,.14);border-color:var(--border-bright);}
+
+/* ── FOOTER ── */
+footer{background:var(--surface);border-top:1px solid var(--border);padding:5rem 5% 2rem;}
+.footer-nl{display:flex;justify-content:space-between;align-items:flex-start;gap:2rem;flex-wrap:wrap;padding-bottom:3.5rem;margin-bottom:3.5rem;border-bottom:1px solid var(--border);}
+.footer-nl-text h3{font-size:.95rem;font-weight:700;margin-bottom:.3rem;}
+.footer-nl-text p{font-size:.78rem;color:var(--muted);font-weight:300;}
+.footer-nl-form{display:flex;gap:.6rem;}
+.footer-nl-form input{background:rgba(0,142,171,.06);border:1px solid var(--border);border-radius:2px;padding:.75rem 1.1rem;color:var(--text);font-family:'Poppins',sans-serif;font-size:.78rem;min-width:230px;outline:none;transition:border-color .2s;}
+.footer-nl-form input::placeholder{color:var(--muted);}
+.footer-nl-form input:focus{border-color:var(--teal);}
+.footer-nl-note{font-size:.66rem;color:var(--muted);margin-top:.5rem;}
+.footer-cols{display:grid;grid-template-columns:2fr 1fr 1fr 1fr 1fr;gap:2rem;margin-bottom:3.5rem;}
+.footer-brand img{height:28px;margin-bottom:1.2rem;display:block;}
+.footer-brand p{font-size:.75rem;color:var(--muted);font-weight:300;line-height:1.7;max-width:26ch;}
+.footer-col h4{font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--text);margin-bottom:1rem;}
+.footer-col ul{list-style:none;}
+.footer-col li{margin-bottom:.5rem;}
+.footer-col a{font-size:.75rem;color:var(--muted);font-weight:300;text-decoration:none;cursor:none;transition:color .2s;}
+.footer-col a:hover{color:var(--teal-light);}
+.footer-bottom{display:flex;justify-content:space-between;align-items:center;padding-top:1.5rem;border-top:1px solid var(--border);flex-wrap:wrap;gap:1rem;}
+.footer-copy{font-size:.7rem;color:var(--muted);}
+.footer-legal{display:flex;gap:1.5rem;}
+.footer-legal a{font-size:.7rem;color:var(--muted);text-decoration:underline;cursor:none;transition:color .2s;}
+.footer-legal a:hover{color:var(--teal-light);}
+.footer-social{display:flex;gap:.5rem;}
+.soc-btn{width:34px;height:34px;background:rgba(0,142,171,.07);border:1px solid var(--border);border-radius:6px;display:flex;align-items:center;justify-content:center;color:var(--muted);text-decoration:none;cursor:none;transition:all .2s;}
+.soc-btn:hover{background:var(--teal);border-color:var(--teal);color:#fff;}
+.soc-btn svg{width:15px;height:15px;fill:currentColor;}
+
+/* ANIMATIONS */
+@keyframes fadeUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:none}}
+.reveal{opacity:0;transform:translateY(28px);transition:opacity .7s ease,transform .7s ease;}
+.reveal.in{opacity:1;transform:none;}
+
+/* RESPONSIVE */
+@media(max-width:1100px){
+  .l369-grid{grid-template-columns:1fr 1fr;}
+  .l369-big{grid-template-columns:1fr;grid-row:span 1;}
+  .l369-big-photo{min-height:220px;}
+}
+@media(max-width:900px){
+  .hero-inner{flex-direction:column;gap:2.5rem;}
+  .tab-pane.active{grid-template-columns:1fr;gap:2rem;padding:2rem 1.5rem;}
+  .tabs-nav{flex-wrap:wrap;}
+  .tab-btn{flex:1 1 33%;}
+}
+@media(max-width:768px){
+  .nav-menu{display:none;} .burger{display:flex;}
+  .t-grid{grid-template-columns:1fr;}
+  .l369-grid{grid-template-columns:1fr;}
+  .l369-big{grid-template-columns:1fr;}
+  .footer-cols{grid-template-columns:1fr;}
+  .footer-nl{flex-direction:column;}
+  .footer-nl-form{flex-direction:column;width:100%;}
+  .footer-nl-form input{min-width:unset;width:100%;}
+  .hero-stat-bar{flex-wrap:wrap;}
+  .hero-stat{flex:1 1 50%;}
+}
+</style>
+</head>
+<body>
+<div id="cur-dot"></div>
+<div id="cur-ring"></div>
+
+<!-- ═══ NAV ═══ -->
+<nav id="nav">
+  <a href="index.html"><img src="data:image/png;base64,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" alt="Sekera Group" style="height:32px;display:block;"></a>
+  <ul class="nav-menu">
+    <li><a href="index.html#layout103">À propos</a></li>
+    <li><a href="index.html#testimonials">Clients</a></li>
+    <li style="position:relative;">
+      <button class="nav-btn" onclick="toggleDrop(this)">Services <span style="font-size:.6rem;">▾</span></button>
+      <div class="dropdown">
+        <div class="drop-group">
+          <h4>Offensif</h4>
+          <a class="drop-link" href="red-teaming.html"><div class="drop-icon">⚔️</div><div><strong>Red Teaming</strong><span>Pentest & simulation d'attaques</span></div></a>
+        </div>
+        <div class="drop-group">
+          <h4>Défense & Conformité</h4>
+          <a class="drop-link" href="soc.html"><div class="drop-icon">🛡️</div><div><strong>Blue Teaming / SOC</strong><span>SOC, Vincilogic & CISO as a Service</span></div></a>
+          <a class="drop-link" href="grc.html"><div class="drop-icon">📋</div><div><strong>Conformité & GRC</strong><span>ISO 27001, RGPD, NIS2, audit</span></div></a>
+          <a class="drop-link" href="#"><div class="drop-icon">🎓</div><div><strong>Cyber Academy</strong><span>SecDojo & formations</span></div></a>
+        </div>
+      </div>
+    </li>
+    <li><a href="index.html#blog">Blog</a></li>
+    <li><a href="index.html#contact">Contact</a></li>
+    <li><a href="index.html#contact" class="nav-cta">Nous contacter</a></li>
+  </ul>
+  <button class="burger" onclick="toggleMobile()"><span></span><span></span><span></span></button>
+</nav>
+<div class="mobile-nav" id="mobileNav">
+  <a href="index.html" onclick="closeMobile()">Accueil</a>
+  <a href="red-teaming.html" onclick="closeMobile()">Red Teaming</a>
+  <a href="soc.html" onclick="closeMobile()">Blue Teaming / SOC</a>
+  <a href="grc.html" onclick="closeMobile()">Conformité & GRC</a>
+  <a href="index.html#contact" onclick="closeMobile()">Contact</a>
+</div>
+
+<!-- ═══ HERO — Header47 ═══ -->
+<section id="hero">
+  <div class="hero-bg-img"></div>
+  <div class="hero-overlay"></div>
+  <div class="hero-glow"></div>
+  <div class="hero-inner">
+    <!-- Colonne gauche : grand titre -->
+    <div class="hero-left">
+      <span class="hero-tag">Conformité & GRC</span>
+      <h1 class="hero-h1">Gouvernance,<br>Risques &<br><span class="accent">Conformité</span></h1>
+    </div>
+    <!-- Colonne droite : texte + CTA -->
+    <div class="hero-right">
+      <p class="hero-p">Face à la multiplication des réglementations — NIS2, DORA, ISO 27001, RGPD — et à l'évolution du cadre normatif marocain (Directive DGSSI), Sekera Group vous accompagne de l'audit initial jusqu'à la certification. Notre approche terrain allie expertise juridique et technique pour transformer la conformité en avantage compétitif.</p>
+      <div class="hero-btns">
+        <a href="#cta" class="btn btn-primary">Demander un audit gratuit</a>
+        <a href="#tabs-section" class="btn btn-outline">Découvrir nos services</a>
+      </div>
+    </div>
+  </div>
+  <div class="hero-stats">
+    <div class="hero-stat-bar">
+      <div class="hero-stat"><span class="hero-stat-num">+40</span><span class="hero-stat-lbl">Certifications obtenues</span></div>
+      <div class="hero-stat"><span class="hero-stat-num">6</span><span class="hero-stat-lbl">Référentiels maîtrisés</span></div>
+      <div class="hero-stat"><span class="hero-stat-num">100%</span><span class="hero-stat-lbl">Taux de succès audit</span></div>
+      <div class="hero-stat"><span class="hero-stat-num">Maroc / FR</span><span class="hero-stat-lbl">Double expertise</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ TABS — 6 services GRC ═══ -->
+<section id="tabs-section" class="section">
+  <div class="container">
+    <div class="tabs-header reveal">
+      <span class="s-tag">Nos services GRC</span>
+      <h2 class="section-heading">Un accompagnement<br>sur tous les référentiels</h2>
+      <p>De l'audit initial à la certification, Sekera couvre l'ensemble du spectre GRC pour les entreprises opérant au Maroc et en France.</p>
+    </div>
+    <div class="tabs-wrapper reveal">
+      <div class="tabs-nav">
+        <button class="tab-btn active" onclick="switchTab(0)">ISO 27001</button>
+        <button class="tab-btn" onclick="switchTab(1)">RGPD</button>
+        <button class="tab-btn" onclick="switchTab(2)">NIS2</button>
+        <button class="tab-btn" onclick="switchTab(3)">DORA</button>
+        <button class="tab-btn" onclick="switchTab(4)">Audit & PSSI</button>
+        <button class="tab-btn" onclick="switchTab(5)">DGSSI Maroc</button>
+      </div>
+
+      <!-- Tab 1 — ISO 27001 -->
+      <div class="tab-pane active" id="tab-0">
+        <div class="tab-content-left">
+          <span class="s-tag">Certification</span>
+          <h3>ISO 27001 — Système de Management de la Sécurité de l'Information</h3>
+          <p>L'ISO 27001 est le standard international de référence pour la sécurité de l'information. Sekera vous accompagne sur l'ensemble du cycle : analyse des écarts, mise en place du SMSI, préparation à l'audit de certification et suivi post-certification.</p>
+          <ul>
+            <li>Analyse des écarts (gap analysis) et cartographie des risques</li>
+            <li>Rédaction de la politique de sécurité et des procédures associées</li>
+            <li>Implémentation des 93 contrôles de l'Annexe A (ISO 27001:2022)</li>
+            <li>Accompagnement jusqu'à l'audit de certification par organisme accrédité</li>
+            <li>Surveillance continue et audits internes périodiques</li>
+          </ul>
+          <div class="btn-group">
+            <a href="#cta" class="btn btn-primary">Démarrer ma certification</a>
+            <button class="btn-ghost-dark">Télécharger le guide ISO <span class="arrow-s">→</span></button>
+          </div>
+        </div>
+        <div class="tab-img">
+          <img src="https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=700&q=80" alt="ISO 27001 audit">
+          <div class="tab-img-glow"></div>
+        </div>
+      </div>
+
+      <!-- Tab 2 — RGPD -->
+      <div class="tab-pane" id="tab-1">
+        <div class="tab-content-left">
+          <span class="s-tag">Protection des données</span>
+          <h3>RGPD — Mise en conformité & DPO externalisé</h3>
+          <p>Depuis son entrée en vigueur, le RGPD impose aux organisations traitant des données de résidents européens des obligations strictes. Sekera propose un accompagnement complet incluant l'audit de conformité, la mise en place du registre des traitements et un service de DPO externalisé.</p>
+          <ul>
+            <li>Audit de conformité RGPD et cartographie des données personnelles</li>
+            <li>Rédaction du registre des traitements et des politiques de confidentialité</li>
+            <li>Analyse d'impact (AIPD / PIA) pour les traitements à risque élevé</li>
+            <li>DPO externalisé : interlocuteur unique auprès de la CNIL / CNDP</li>
+            <li>Formation des équipes et gestion des violations de données</li>
+          </ul>
+          <div class="btn-group">
+            <a href="#cta" class="btn btn-primary">Audit RGPD offert</a>
+            <button class="btn-ghost-dark">En savoir plus <span class="arrow-s">→</span></button>
+          </div>
+        </div>
+        <div class="tab-img">
+          <img src="https://images.unsplash.com/photo-1563986768609-322da13575f3?w=700&q=80" alt="RGPD conformité">
+          <div class="tab-img-glow"></div>
+        </div>
+      </div>
+
+      <!-- Tab 3 — NIS2 -->
+      <div class="tab-pane" id="tab-2">
+        <div class="tab-content-left">
+          <span class="s-tag">Directive européenne</span>
+          <h3>NIS2 — Préparation & mise en conformité</h3>
+          <p>La directive NIS2, transposée en droit français en 2024, élargit considérablement le périmètre des entités soumises aux obligations de cybersécurité. Sekera identifie votre niveau d'assujettissement et vous accompagne dans la mise en conformité avec les 10 mesures clés.</p>
+          <ul>
+            <li>Analyse d'assujettissement : entité essentielle ou importante ?</li>
+            <li>Évaluation des risques et plan de traitement conforme NIS2</li>
+            <li>Mesures de sécurité : authentification, chiffrement, continuité d'activité</li>
+            <li>Mise en place des procédures de notification d'incidents (CERT-FR / ANSSI)</li>
+            <li>Gouvernance de la chaîne d'approvisionnement et gestion tiers</li>
+          </ul>
+          <div class="btn-group">
+            <a href="#cta" class="btn btn-primary">Vérifier mon assujettissement</a>
+            <button class="btn-ghost-dark">Guide NIS2 gratuit <span class="arrow-s">→</span></button>
+          </div>
+        </div>
+        <div class="tab-img">
+          <img src="https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?w=700&q=80" alt="NIS2 directive">
+          <div class="tab-img-glow"></div>
+        </div>
+      </div>
+
+      <!-- Tab 4 — DORA -->
+      <div class="tab-pane" id="tab-3">
+        <div class="tab-content-left">
+          <span class="s-tag">Secteur financier</span>
+          <h3>DORA — Résilience opérationnelle numérique</h3>
+          <p>Entré en application en janvier 2025, le règlement DORA impose aux entités financières de l'UE un cadre rigoureux de gestion des risques TIC et de résilience. Sekera accompagne banques, assurances et prestataires de services financiers dans leur mise en conformité.</p>
+          <ul>
+            <li>Gap analysis DORA et cartographie des risques TIC</li>
+            <li>Cadre de gestion des incidents liés aux TIC (classification, notification ACPR / AMF)</li>
+            <li>Tests de résilience opérationnelle : TLPT (Threat-Led Penetration Testing)</li>
+            <li>Gestion du risque lié aux prestataires tiers TIC critiques</li>
+            <li>Documentation et rapports réglementaires obligatoires</li>
+          </ul>
+          <div class="btn-group">
+            <a href="#cta" class="btn btn-primary">Évaluation DORA gratuite</a>
+            <button class="btn-ghost-dark">En savoir plus <span class="arrow-s">→</span></button>
+          </div>
+        </div>
+        <div class="tab-img">
+          <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=700&q=80" alt="DORA financial resilience">
+          <div class="tab-img-glow"></div>
+        </div>
+      </div>
+
+      <!-- Tab 5 — Audit & PSSI -->
+      <div class="tab-pane" id="tab-4">
+        <div class="tab-content-left">
+          <span class="s-tag">Gouvernance</span>
+          <h3>Audit de sécurité & Politique de Sécurité du SI</h3>
+          <p>La PSSI est le document fondateur de votre gouvernance cyber. Sekera réalise des audits organisationnels et techniques approfondis, et co-construit votre PSSI sur mesure, alignée sur les meilleures pratiques et les exigences réglementaires de votre secteur.</p>
+          <ul>
+            <li>Audit organisationnel basé sur ISO 27001, EBIOS RM et NIST CSF</li>
+            <li>Audit technique : revue d'architecture, tests de configuration, analyse des accès</li>
+            <li>Rédaction de la PSSI et des chartes d'utilisation du SI</li>
+            <li>Plan de traitement des risques priorisé et chiffré</li>
+            <li>Tableau de bord de suivi et revue de direction annuelle</li>
+          </ul>
+          <div class="btn-group">
+            <a href="#cta" class="btn btn-primary">Commander un audit</a>
+            <button class="btn-ghost-dark">Voir un exemple de PSSI <span class="arrow-s">→</span></button>
+          </div>
+        </div>
+        <div class="tab-img">
+          <img src="https://images.unsplash.com/photo-1507679799987-c73779587ccf?w=700&q=80" alt="Audit PSSI">
+          <div class="tab-img-glow"></div>
+        </div>
+      </div>
+
+      <!-- Tab 6 — DGSSI Maroc -->
+      <div class="tab-pane" id="tab-5">
+        <div class="tab-content-left">
+          <span class="s-tag">Contexte marocain</span>
+          <h3>DGSSI & Conformité cyber au Maroc</h3>
+          <p>La Directive Nationale de la Sécurité des Systèmes d'Information (DGSSI) établit le référentiel de sécurité applicable aux administrations et opérateurs d'importance vitale marocains. Sekera est l'un des rares acteurs à maîtriser à la fois le cadre DGSSI et les exigences européennes, offrant une couverture unique Maroc-France.</p>
+          <ul>
+            <li>Audit de conformité DGSSI et cartographie des systèmes sensibles</li>
+            <li>Accompagnement homologation DGSSI pour les OIV marocains</li>
+            <li>Mise en place des mesures de sécurité Tier 1, 2 et 3 de la DGSSI</li>
+            <li>Alignement avec la loi 09-08 sur la protection des données personnelles</li>
+            <li>Interface avec la DGSSI, ANRT et CNDP Maroc</li>
+          </ul>
+          <div class="btn-group">
+            <a href="#cta" class="btn btn-primary">Audit DGSSI gratuit</a>
+            <button class="btn-ghost-dark">Contexte réglementaire Maroc <span class="arrow-s">→</span></button>
+          </div>
+        </div>
+        <div class="tab-img">
+          <img src="https://images.unsplash.com/photo-1573164713988-8665fc963095?w=700&q=80" alt="DGSSI Maroc conformité">
+          <div class="tab-img-glow"></div>
+        </div>
+      </div>
+
+    </div><!-- /tabs-wrapper -->
+  </div>
+</section>
+
+<!-- ═══ LAYOUT369 — Pourquoi Sekera GRC ═══ -->
+<section id="benefices" class="section">
+  <div class="container">
+    <div class="l369-header reveal">
+      <span class="s-tag">Notre valeur ajoutée</span>
+      <h2 class="section-heading">Maîtriser l'imprévu,<br>anticiper les crises</h2>
+      <p>Sekera transforme la conformité contrainte en levier de confiance et de compétitivité pour votre organisation.</p>
+    </div>
+    <div class="l369-grid reveal">
+
+      <!-- Carte grande -->
+      <div class="l369-big">
+        <div class="l369-big-content">
+          <div>
+            <p class="card-tag">Expertise duale</p>
+            <h3 class="card-h3" style="font-size:1.25rem;line-height:1.2;margin-bottom:.8rem;">Seule expertise Maroc–France sur tout le spectre GRC</h3>
+            <p class="card-p" style="font-size:.82rem;">Nos équipes maîtrisent simultanément le cadre normatif français (ANSSI, CNIL, AMF) et le cadre marocain (DGSSI, CNDP, ANRT). Une couverture unique pour les groupes binationaux et les filiales.</p>
+          </div>
+          <button class="btn-ghost">Découvrir notre approche <svg class="arrow-svg" viewBox="0 0 15 15" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M6.158 3.135c.2-.19.516-.18.705.02l3.75 4a.5.5 0 010 .69l-3.75 4c-.19.2-.505.21-.705.02a.5.5 0 01-.02-.705L9.565 7.5 6.138 3.84a.5.5 0 01.02-.705z" fill="currentColor"/></svg></button>
+        </div>
+        <div class="l369-big-photo">
+          <img src="https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=700&q=80" alt="Expertise GRC Maroc France">
+        </div>
+      </div>
+
+      <!-- Petite 1 -->
+      <div class="l369-sm">
+        <div class="l369-sm-content">
+          <p class="card-tag">Sérénité</p>
+          <h3 class="card-h3">Maîtriser l'imprévu</h3>
+          <p class="card-p">Anticiper les crises et les gérer efficacement grâce à des plans de continuité et de reprise d'activité testés et documentés.</p>
+          <button class="btn-ghost-dark" style="font-size:.75rem;">En savoir plus <svg class="arrow-svg" viewBox="0 0 15 15" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M6.158 3.135c.2-.19.516-.18.705.02l3.75 4a.5.5 0 010 .69l-3.75 4c-.19.2-.505.21-.705.02a.5.5 0 01-.02-.705L9.565 7.5 6.138 3.84a.5.5 0 01.02-.705z" fill="currentColor"/></svg></button>
+        </div>
+        <div class="l369-sm-photo"><img src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=500&q=80" alt="Gestion de crise"></div>
+      </div>
+
+      <!-- Petite 2 -->
+      <div class="l369-sm">
+        <div class="l369-sm-content">
+          <p class="card-tag">Conformité</p>
+          <h3 class="card-h3">Réduire l'exposition réglementaire</h3>
+          <p class="card-p">Sanctions RGPD, NIS2 et DORA peuvent atteindre 10 millions d'euros ou 2% du CA mondial. Notre mission : vous protéger avant qu'il ne soit trop tard.</p>
+          <button class="btn-ghost-dark" style="font-size:.75rem;">En savoir plus <svg class="arrow-svg" viewBox="0 0 15 15" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M6.158 3.135c.2-.19.516-.18.705.02l3.75 4a.5.5 0 010 .69l-3.75 4c-.19.2-.505.21-.705.02a.5.5 0 01-.02-.705L9.565 7.5 6.138 3.84a.5.5 0 01.02-.705z" fill="currentColor"/></svg></button>
+        </div>
+        <div class="l369-sm-photo"><img src="https://images.unsplash.com/photo-1450101499163-c8848c66ca85?w=500&q=80" alt="Conformité réglementaire"></div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ═══ TÉMOIGNAGES ═══ -->
+<section id="testimonials" class="section">
+  <div class="container">
+    <div class="t-header reveal">
+      <h2 class="section-heading">Témoignages clients</h2>
+      <p>Ce que disent nos clients après leur parcours GRC avec Sekera.</p>
+    </div>
+    <div class="t-grid reveal">
+      <div class="t-card">
+        <div>
+          <div class="t-stars">★★★★★</div>
+          <p class="t-quote">« Grâce à Sekera, nous avons obtenu notre certification ISO 27001 en moins de 9 mois. Leur expertise terrain et leur connaissance du contexte marocain ont été décisives pour notre comité de direction. »</p>
+        </div>
+        <div class="t-author">
+          <div class="t-av"><img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?w=100&q=80" alt=""></div>
+          <div><div class="t-name">DSI, Groupe bancaire</div><div class="t-role">Casablanca — ISO 27001</div></div>
+        </div>
+      </div>
+      <div class="t-card">
+        <div>
+          <div class="t-stars">★★★★★</div>
+          <p class="t-quote">« L'accompagnement NIS2 de Sekera nous a permis d'identifier en 3 semaines nos obligations d'entité essentielle et de prioriser notre feuille de route sans mobiliser nos équipes internes à plein temps. »</p>
+        </div>
+        <div class="t-author">
+          <div class="t-av"><img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&q=80" alt=""></div>
+          <div><div class="t-name">RSSI, Opérateur télécom</div><div class="t-role">Paris — NIS2</div></div>
+        </div>
+      </div>
+      <div class="t-card">
+        <div>
+          <div class="t-stars">★★★★★</div>
+          <p class="t-quote">« Le DPO externalisé Sekera gère nos relations CNDP et supervise notre registre des traitements. Une solution flexible et experte qui nous a évité un recrutement coûteux et les risques associés. »</p>
+        </div>
+        <div class="t-author">
+          <div class="t-av"><img src="https://images.unsplash.com/photo-1580489944761-15a19d654956?w=100&q=80" alt=""></div>
+          <div><div class="t-name">DAF, Groupe industriel</div><div class="t-role">Rabat — RGPD / Loi 09-08</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ CTA33 — centré + logos certifications ═══ -->
+<section id="cta" class="section">
+  <div class="container">
+    <div class="cta-inner reveal">
+      <span class="s-tag">Passez à l'action</span>
+      <h2 class="section-heading">Prêt à engager<br>votre mise en conformité ?</h2>
+      <p>Nos experts vous répondent sous 24h pour un premier diagnostic gratuit. Maroc ou France, nous intervenons sur site ou à distance.</p>
+      <div class="cta-btns">
+        <a href="index.html#contact" class="btn btn-primary">Audit gratuit → Contactez-nous</a>
+        <a href="#" class="btn btn-outline">Télécharger notre Guide GRC</a>
+      </div>
+      <div style="height:1px;background:var(--border);margin:2.5rem 0;"></div>
+      <p style="font-size:.7rem;color:var(--muted);margin-bottom:1.5rem;text-transform:uppercase;letter-spacing:.1em;font-weight:700;">Référentiels maîtrisés</p>
+      <div class="cta-logos">
+        <span class="cert-badge">ISO 27001:2022</span>
+        <span class="cert-badge">RGPD / GDPR</span>
+        <span class="cert-badge">NIS2</span>
+        <span class="cert-badge">DORA</span>
+        <span class="cert-badge">DGSSI Maroc</span>
+        <span class="cert-badge">Loi 09-08</span>
+        <span class="cert-badge">PCI DSS v4</span>
+        <span class="cert-badge">EBIOS RM</span>
+        <span class="cert-badge">NIST CSF</span>
+        <span class="cert-badge">ISO 22301</span>
+        <span class="cert-badge">SOC 2 Type II</span>
+        <span class="cert-badge">HDS</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ FOOTER ═══ -->
+<footer>
+  <div class="container">
+    <div class="footer-nl">
+      <div class="footer-nl-text">
+        <h3>Restez informés</h3>
+        <p>Actualités réglementaires, alertes et ressources GRC — dans votre boîte mail.</p>
+      </div>
+      <div>
+        <div class="footer-nl-form">
+          <input type="email" placeholder="Entrez votre email">
+          <button class="btn btn-primary" type="button" style="padding:.75rem 1.4rem;">S'abonner</button>
+        </div>
+        <p class="footer-nl-note">En vous inscrivant, vous acceptez notre Politique de confidentialité.</p>
+      </div>
+    </div>
+    <div class="footer-cols">
+      <div class="footer-brand">
+        <img src="data:image/png;base64,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" alt="Sekera Group">
+        <p>Trust, Expertise and Innovation. Votre partenaire cybersécurité au Maroc et en France.</p>
+      </div>
+      <div class="footer-col"><h4>Services</h4><ul>
+        <li><a href="red-teaming.html">Red Teaming</a></li>
+        <li><a href="soc.html">Blue Teaming / SOC</a></li>
+        <li><a href="grc.html">Conformité & GRC</a></li>
+        <li><a href="#">Cyber Academy</a></li>
+        <li><a href="#">SecDojo</a></li>
+      </ul></div>
+      <div class="footer-col"><h4>Entreprise</h4><ul>
+        <li><a href="index.html#layout103">À propos</a></li>
+        <li><a href="#">Notre équipe</a></li>
+        <li><a href="#">Carrières</a></li>
+        <li><a href="#">Partenaires</a></li>
+        <li><a href="#">Presse</a></li>
+      </ul></div>
+      <div class="footer-col"><h4>Ressources</h4><ul>
+        <li><a href="index.html#blog">Blog</a></li>
+        <li><a href="#">Études de cas</a></li>
+        <li><a href="#">Livres blancs GRC</a></li>
+        <li><a href="#">Certifications</a></li>
+        <li><a href="index.html#faq">FAQ</a></li>
+      </ul></div>
+      <div class="footer-col"><h4>Légal</h4><ul>
+        <li><a href="#">Mentions légales</a></li>
+        <li><a href="#">Confidentialité</a></li>
+        <li><a href="#">CGU</a></li>
+        <li><a href="#">Cookies</a></li>
+        <li><a href="index.html#contact">Contact</a></li>
+      </ul></div>
+    </div>
+    <div class="footer-bottom">
+      <span class="footer-copy">© 2025 Sekera Group. Tous droits réservés.</span>
+      <div class="footer-legal">
+        <a href="#">Politique de confidentialité</a>
+        <a href="#">Conditions d'utilisation</a>
+        <a href="#">Cookies</a>
+      </div>
+      <div class="footer-social">
+        <a href="#" class="soc-btn"><svg viewBox="0 0 24 24"><path d="M12.001 2.002c-5.522 0-9.999 4.477-9.999 9.999 0 4.99 3.656 9.126 8.437 9.879v-6.988h-2.54v-2.891h2.54V9.798c0-2.508 1.493-3.891 3.776-3.891 1.094 0 2.24.195 2.24.195v2.459h-1.264c-1.24 0-1.628.772-1.628 1.563v1.875h2.771l-.443 2.891h-2.328v6.988C18.344 21.129 22 16.992 22 12.001c0-5.522-4.477-9.999-9.999-9.999z"/></svg></a>
+        <a href="#" class="soc-btn"><svg viewBox="0 0 24 24"><path d="M11.999 7.377a4.623 4.623 0 1 0 0 9.248 4.623 4.623 0 0 0 0-9.248zm0 7.627a3.004 3.004 0 1 1 0-6.008 3.004 3.004 0 0 1 0 6.008z"/><circle cx="16.806" cy="7.207" r="1.078"/><path d="M20.533 6.111A4.605 4.605 0 0 0 17.9 3.479a6.606 6.606 0 0 0-2.186-.42c-.963-.042-1.268-.054-3.71-.054s-2.755 0-3.71.054a6.554 6.554 0 0 0-2.184.42 4.6 4.6 0 0 0-2.633 2.632 6.585 6.585 0 0 0-.419 2.186c-.043.962-.056 1.267-.056 3.71 0 2.442 0 2.753.056 3.71.015.748.156 1.486.419 2.187a4.61 4.61 0 0 0 2.634 2.632 6.584 6.584 0 0 0 2.185.45c.963.042 1.268.055 3.71.055s2.755 0 3.71-.055a6.615 6.615 0 0 0 2.186-.419 4.613 4.613 0 0 0 2.633-2.633c.263-.7.404-1.438.419-2.186.043-.962.056-1.267.056-3.71s0-2.753-.056-3.71a6.581 6.581 0 0 0-.421-2.217zm-1.218 9.532a5.043 5.043 0 0 1-.311 1.688 2.987 2.987 0 0 1-1.712 1.711 4.985 4.985 0 0 1-1.67.311c-.95.044-1.218.055-3.654.055-2.438 0-2.687 0-3.655-.055a4.96 4.96 0 0 1-1.669-.311 2.985 2.985 0 0 1-1.719-1.711 5.08 5.08 0 0 1-.311-1.669c-.043-.95-.053-1.218-.053-3.654 0-2.437 0-2.686.053-3.655a5.038 5.038 0 0 1 .311-1.687c.305-.789.93-1.41 1.719-1.712a5.01 5.01 0 0 1 1.669-.311c.951-.043 1.218-.055 3.655-.055s2.687 0 3.654.055a4.96 4.96 0 0 1 1.67.311 2.991 2.991 0 0 1 1.712 1.712 5.08 5.08 0 0 1 .311 1.669c.043.951.054 1.218.054 3.655 0 2.436 0 2.698-.043 3.654h-.011z"/></svg></a>
+        <a href="#" class="soc-btn"><svg viewBox="0 0 512 512"><path d="M389.2 48h70.6L305.6 224.2 487 464H345L233.7 318.6 106.5 464H35.8L200.7 275.5 26.8 48H172.4L272.9 180.9 389.2 48zM364.4 421.8h39.1L151.1 88h-42L364.4 421.8z"/></svg></a>
+        <a href="#" class="soc-btn"><svg viewBox="0 0 24 24"><path d="M20 3H4a1 1 0 0 0-1 1v16a1 1 0 0 0 1 1h16a1 1 0 0 0 1-1V4a1 1 0 0 0-1-1zM8.339 18.337H5.667v-8.59h2.672v8.59zM7.003 8.574a1.548 1.548 0 1 1 0-3.096 1.548 1.548 0 0 1 0 3.096zm11.335 9.763h-2.669V14.16c0-.996-.018-2.277-1.388-2.277-1.39 0-1.601 1.086-1.601 2.207v4.248h-2.667v-8.59h2.56v1.174h.037c.355-.675 1.227-1.387 2.524-1.387 2.704 0 3.203 1.778 3.203 4.092v4.71z"/></svg></a>
+        <a href="#" class="soc-btn"><svg viewBox="0 0 24 24"><path d="M21.593 7.203a2.506 2.506 0 0 0-1.762-1.766C18.265 5.007 12 5 12 5s-6.264-.007-7.831.404a2.56 2.56 0 0 0-1.766 1.778c-.413 1.566-.417 4.814-.417 4.814s-.004 3.264.406 4.814c.23.857.905 1.534 1.763 1.765 1.582.43 7.83.437 7.83.437s6.265.007 7.831-.403a2.515 2.515 0 0 0 1.767-1.763c.414-1.565.417-4.812.417-4.812s.02-3.265-.407-4.831zM9.996 15.005l.005-6 5.207 3.005-5.212 2.995z"/></svg></a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+/* cursor */
+const dot=document.getElementById('cur-dot'),ring=document.getElementById('cur-ring');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;dot.style.left=mx+'px';dot.style.top=my+'px';});
+(function loop(){rx+=(mx-rx)*.1;ry+=(my-ry)*.1;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(loop);})();
+document.querySelectorAll('a,button').forEach(el=>{el.addEventListener('mouseenter',()=>document.body.classList.add('cur-hover'));el.addEventListener('mouseleave',()=>document.body.classList.remove('cur-hover'));});
+
+/* nav scroll */
+const nav=document.getElementById('nav');
+window.addEventListener('scroll',()=>nav.classList.toggle('scrolled',scrollY>60));
+
+/* dropdown */
+function toggleDrop(btn){const li=btn.closest('li');const was=li.classList.contains('open');document.querySelectorAll('nav li.open').forEach(l=>l.classList.remove('open'));document.querySelectorAll('.dropdown.open').forEach(d=>d.classList.remove('open'));if(!was){li.classList.add('open');li.querySelector('.dropdown').classList.add('open');}}
+document.addEventListener('click',e=>{if(!e.target.closest('nav li')){document.querySelectorAll('nav li.open').forEach(l=>l.classList.remove('open'));document.querySelectorAll('.dropdown.open').forEach(d=>d.classList.remove('open'));}});
+
+/* mobile */
+function toggleMobile(){document.getElementById('mobileNav').classList.toggle('open');}
+function closeMobile(){document.getElementById('mobileNav').classList.remove('open');}
+
+/* tabs */
+function switchTab(idx){
+  document.querySelectorAll('.tab-btn').forEach((b,i)=>b.classList.toggle('active',i===idx));
+  document.querySelectorAll('.tab-pane').forEach((p,i)=>p.classList.toggle('active',i===idx));
+}
+
+/* reveal on scroll */
+const obs=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting){const sibs=[...e.target.parentElement.querySelectorAll('.reveal')];e.target.style.transitionDelay=(sibs.indexOf(e.target)*.1)+'s';e.target.classList.add('in');}});},{threshold:.08});
+document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+</script>
+</body>
+</html>
